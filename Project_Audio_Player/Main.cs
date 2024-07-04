@@ -12,8 +12,7 @@ namespace Project_Audio_Player
             InitializeComponent();
         }
 
-
-        private void MainForm_Load(object sender, EventArgs e)
+        private void Main_Load(object sender, EventArgs e)
         {
             // Load your audio file
             string audioFilePath = "path/to/your/audio.wav";
@@ -33,21 +32,21 @@ namespace Project_Audio_Player
             // Handle playback stopped (e.g., reset visualizer position)
         }
 
-        private void pictureBoxWaveform_Paint(object sender, PaintEventArgs e)
-        {
-            // Calculate visualizer position based on audio playback position
-            float playbackPosition = (float)audioFileReader.CurrentTime.TotalSeconds;
-            float totalDuration = (float)audioFileReader.TotalTime.TotalSeconds;
-            float visualizerWidth = pictureBoxWaveform.Width;
+        //    private void pictureBoxWaveform_Paint(object sender, PaintEventArgs e)
+        //    {
+        //        // Calculate visualizer position based on audio playback position
+        //        float playbackPosition = (float)audioFileReader.CurrentTime.TotalSeconds;
+        //        float totalDuration = (float)audioFileReader.TotalTime.TotalSeconds;
+        //        float visualizerWidth = pictureBoxWaveform.Width;
 
-            float visualizerX = playbackPosition / totalDuration * visualizerWidth;
+        //        float visualizerX = playbackPosition / totalDuration * visualizerWidth;
 
-            // Draw a vertical line (you can customize this)
-            using (var pen = new Pen(Color.Red, 2))
-            {
-                e.Graphics.DrawLine(pen, visualizerX, 0, visualizerX, pictureBoxWaveform.Height);
-            }
-        }
+        //        // Draw a vertical line (you can customize this)
+        //        using (var pen = new Pen(Color.Red, 2))
+        //        {
+        //            e.Graphics.DrawLine(pen, visualizerX, 0, visualizerX, pictureBoxWaveform.Height);
+        //        }
+        //    }
 
     }
 }
