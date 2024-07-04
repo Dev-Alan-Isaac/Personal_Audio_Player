@@ -29,40 +29,32 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            waveViewer1 = new NAudio.Gui.WaveViewer();
             label1 = new Label();
-            panel1.SuspendLayout();
+            panel2 = new Panel();
             SuspendLayout();
             // 
             // panel1
             // 
-            panel1.Controls.Add(waveViewer1);
-            panel1.Controls.Add(label1);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(800, 125);
-            panel1.TabIndex = 4;
-            // 
-            // waveViewer1
-            // 
-            waveViewer1.Dock = DockStyle.Bottom;
-            waveViewer1.Location = new Point(0, 23);
-            waveViewer1.Name = "waveViewer1";
-            waveViewer1.SamplesPerPixel = 128;
-            waveViewer1.Size = new Size(800, 102);
-            waveViewer1.StartPosition = 0L;
-            waveViewer1.TabIndex = 1;
-            waveViewer1.WaveStream = null;
+            panel1.Size = new Size(800, 164);
+            panel1.TabIndex = 0;
             // 
             // label1
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(3, 0);
+            label1.Location = new Point(0, 0);
             label1.Name = "label1";
-            label1.Size = new Size(58, 20);
+            label1.Size = new Size(100, 23);
             label1.TabIndex = 0;
-            label1.Text = "Naudio";
+            // 
+            // panel2
+            // 
+            panel2.Dock = DockStyle.Bottom;
+            panel2.Location = new Point(0, 380);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(800, 70);
+            panel2.TabIndex = 1;
             // 
             // Main
             // 
@@ -70,16 +62,16 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(panel1);
+            Controls.Add(panel2);
             Name = "Main";
             Text = "Form1";
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            Load += Main_Load;
             ResumeLayout(false);
         }
 
         #endregion
         private Panel panel1;
-        private NAudio.Gui.WaveViewer waveViewer1;
         private Label label1;
+        private Panel panel2;
     }
 }
