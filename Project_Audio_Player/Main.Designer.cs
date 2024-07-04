@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             panel1 = new Panel();
+            waveformPainter1 = new NAudio.Gui.WaveformPainter();
             label1 = new Label();
             panel2 = new Panel();
             button1 = new Button();
             button2 = new Button();
-            waveformPainter1 = new NAudio.Gui.WaveformPainter();
+            timer1 = new System.Windows.Forms.Timer(components);
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
@@ -46,6 +48,15 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(800, 164);
             panel1.TabIndex = 0;
+            // 
+            // waveformPainter1
+            // 
+            waveformPainter1.Location = new Point(12, 12);
+            waveformPainter1.Name = "waveformPainter1";
+            waveformPainter1.Size = new Size(776, 99);
+            waveformPainter1.TabIndex = 0;
+            waveformPainter1.Text = "waveformPainter1";
+            waveformPainter1.Paint += waveformPainter1_Paint;
             // 
             // label1
             // 
@@ -84,14 +95,9 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
-            // waveformPainter1
+            // timer1
             // 
-            waveformPainter1.Location = new Point(12, 12);
-            waveformPainter1.Name = "waveformPainter1";
-            waveformPainter1.Size = new Size(776, 99);
-            waveformPainter1.TabIndex = 0;
-            waveformPainter1.Text = "waveformPainter1";
-            waveformPainter1.Paint += waveformPainter1_Paint;
+            timer1.Enabled = true;
             // 
             // Main
             // 
@@ -115,5 +121,6 @@
         private Button button1;
         private Button button2;
         private NAudio.Gui.WaveformPainter waveformPainter1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
