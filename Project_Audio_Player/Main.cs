@@ -1,11 +1,11 @@
+using NAudio.Gui;
 using NAudio.Wave;
 
 namespace Project_Audio_Player
 {
     public partial class Main : Form
     {
-        private WaveOutEvent waveOut;
-        private AudioFileReader audioFileReader;
+        private string selectedFilePath; // Variable para almacenar la ruta del archivo seleccionado
 
         public Main()
         {
@@ -14,39 +14,104 @@ namespace Project_Audio_Player
 
         private void Main_Load(object sender, EventArgs e)
         {
-            // Load your audio file
-            string audioFilePath = "path/to/your/audio.wav";
-            audioFileReader = new AudioFileReader(audioFilePath);
+            // Mostrar el cuadro de diálogo de archivo
+            using (var openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Archivos de audio|*.wav;*.aiff;*.mp3;*.flac|Todos los archivos|*.*";
+                openFileDialog.Title = "Selecciona un archivo de audio";
 
-            // Initialize WaveOutEvent for audio playback
-            waveOut = new WaveOutEvent();
-            waveOut.Init(audioFileReader);
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Obtener la ruta del archivo seleccionado
+                    selectedFilePath = openFileDialog.FileName;
 
-            // Subscribe to PositionChanged event
-            waveOut.PlaybackStopped += WaveOut_PlaybackStopped;
-            waveOut.Play();
+                    if (!string.IsNullOrEmpty(selectedFilePath))
+                    {
+                        try
+                        {
+                            using (var audioFileReader = new AudioFileReader(selectedFilePath))
+                            {
+                                using (var outputDevice = new WaveOutEvent())
+                                {
+                                    outputDevice.Init(audioFileReader);
+                                    outputDevice.Play();
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Manejar excepciones (por ejemplo, archivo no encontrado, formato no compatible)
+                            MessageBox.Show($"Error al reproducir el audio: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
         }
 
-        private void WaveOut_PlaybackStopped(object sender, StoppedEventArgs e)
+        // Play
+        private void button1_Click(object sender, EventArgs e)
         {
-            // Handle playback stopped (e.g., reset visualizer position)
+            if (!string.IsNullOrEmpty(selectedFilePath))
+            {
+                try
+                {
+                    using (var audioFileReader = new AudioFileReader(selectedFilePath))
+                    {
+                        using (var outputDevice = new WaveOutEvent())
+                        {
+                            outputDevice.Init(audioFileReader);
+                            outputDevice.Play();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejar excepciones (por ejemplo, archivo no encontrado, formato no compatible)
+                    MessageBox.Show($"Error al reproducir el audio: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
-        //    private void pictureBoxWaveform_Paint(object sender, PaintEventArgs e)
-        //    {
-        //        // Calculate visualizer position based on audio playback position
-        //        float playbackPosition = (float)audioFileReader.CurrentTime.TotalSeconds;
-        //        float totalDuration = (float)audioFileReader.TotalTime.TotalSeconds;
-        //        float visualizerWidth = pictureBoxWaveform.Width;
 
-        //        float visualizerX = playbackPosition / totalDuration * visualizerWidth;
 
-        //        // Draw a vertical line (you can customize this)
-        //        using (var pen = new Pen(Color.Red, 2))
-        //        {
-        //            e.Graphics.DrawLine(pen, visualizerX, 0, visualizerX, pictureBoxWaveform.Height);
-        //        }
-        //    }
+        // Pause
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void waveformPainter1_Paint(object sender, PaintEventArgs e)
+        {
+
+            if (!string.IsNullOrEmpty(selectedFilePath))
+            {
+                // Crear un lector de audio para el archivo
+                using (var audioFileReader = new AudioFileReader(selectedFilePath))
+                {
+                    // Configurar los parámetros para la representación de la forma de onda
+                    int width = waveformPainter1.Width;
+                    int height = waveformPainter1.Height;
+                    int samplesPerPixel = audioFileReader.WaveFormat.SampleRate / width;
+                    int bufferSize = samplesPerPixel * audioFileReader.WaveFormat.Channels;
+                    float[] buffer = new float[bufferSize];
+
+                    // Dibujar la forma de onda
+                    for (int x = 0; x < width; x++)
+                    {
+                        int bytesRead = audioFileReader.Read(buffer, 0, bufferSize);
+                        if (bytesRead == 0) break;
+
+                        float maxSample = buffer.Take(bytesRead).Max();
+                        float minSample = buffer.Take(bytesRead).Min();
+
+                        int yTop = (int)(height * (1 - maxSample));
+                        int yBottom = (int)(height * (1 - minSample));
+
+                        e.Graphics.DrawLine(Pens.Blue, x, yTop, x, yBottom);
+                    }
+                }
+            }
+        }
 
     }
 }
